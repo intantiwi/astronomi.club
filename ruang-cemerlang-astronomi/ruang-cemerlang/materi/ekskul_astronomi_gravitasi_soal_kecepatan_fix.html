@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ekskul Astronomi — Gravitasi Newton dan Orbit Satelit</title>
+<script>
+window.MathJax = {
+  tex: {inlineMath: [['\\(','\\)'], ['$', '$']], displayMath: [['\\[','\\]']]},
+  svg: {fontCache: 'global'}
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+  :root{
+    --bg:#08111f;
+    --bg2:#111b2e;
+    --card:#ffffff;
+    --ink:#142033;
+    --muted:#536079;
+    --accent:#f4a261;
+    --accent2:#2a9d8f;
+    --soft:#eef3f8;
+    --danger:#e76f51;
+    --blue:#335cde;
+    --green:#2a9d8f;
+    --purple:#7a59c9;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth;background:var(--bg)}
+  body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+  .slide{
+    min-height:100vh;
+    width:100vw;
+    padding:5.5vh 6vw 7vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    position:relative;
+    page-break-after:always;
+    background:
+      radial-gradient(circle at 80% 12%, rgba(244,162,97,.22), transparent 24%),
+      radial-gradient(circle at 12% 85%, rgba(42,157,143,.20), transparent 28%),
+      linear-gradient(135deg, #f8fbff 0%, #eef4fb 52%, #e7eef9 100%);
+  }
+  .slide.dark{
+    color:white;
+    background:
+      radial-gradient(circle at 75% 18%, rgba(244,162,97,.28), transparent 26%),
+      radial-gradient(circle at 20% 85%, rgba(42,157,143,.28), transparent 30%),
+      linear-gradient(135deg, #07101f 0%, #111d33 62%, #182a45 100%);
+  }
+  .slide.section{
+    color:white;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(244,162,97,.32), transparent 23%),
+      radial-gradient(circle at 84% 78%, rgba(42,157,143,.26), transparent 28%),
+      linear-gradient(135deg, #10203a 0%, #0a1425 100%);
+  }
+  .kicker{font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);font-size:1.05rem;margin-bottom:.8rem}
+  .dark .kicker,.section .kicker{color:#8ee1d5}
+  h1{font-size:clamp(3rem,6vw,6.5rem);line-height:.95;margin:.1em 0 .25em;font-weight:900;letter-spacing:-.06em}
+  h2{font-size:clamp(2.2rem,4.3vw,4.5rem);line-height:1.02;margin:.05em 0 .35em;font-weight:900;letter-spacing:-.045em}
+  h3{font-size:clamp(1.5rem,2.6vw,2.6rem);line-height:1.08;margin:.1em 0 .45em;font-weight:850;letter-spacing:-.025em}
+  p,li{font-size:clamp(1.15rem,1.55vw,1.75rem);line-height:1.35}
+  ul{padding-left:1.35em;margin:.55em 0}
+  .small{font-size:clamp(.95rem,1.15vw,1.25rem);color:var(--muted)}
+  .dark .small,.section .small{color:#cbd6e7}
+  .lead{font-size:clamp(1.6rem,2.35vw,2.65rem);line-height:1.25;max-width:1100px;color:#21314e}
+  .dark .lead,.section .lead{color:#f5f7fb}
+  .grid{display:grid;gap:1.25rem}
+  .grid.two{grid-template-columns:1fr 1fr}
+  .grid.three{grid-template-columns:repeat(3,1fr)}
+  .card{
+    background:rgba(255,255,255,.88);
+    border:1px solid rgba(20,32,51,.08);
+    box-shadow:0 18px 45px rgba(20,32,51,.12);
+    border-radius:28px;
+    padding:1.4rem 1.55rem;
+  }
+  .dark .card,.section .card{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.15);color:white;box-shadow:0 18px 45px rgba(0,0,0,.28)}
+  .formula{
+    background:#0e1a2e;
+    color:white;
+    border-radius:28px;
+    padding:1.15rem 1.3rem;
+    margin:.8rem 0;
+    font-size:clamp(1.35rem,2.3vw,2.5rem);
+    text-align:center;
+    box-shadow:0 20px 55px rgba(8,17,31,.25);
+  }
+  .formula.light{background:white;color:var(--ink);border:1px solid rgba(20,32,51,.08)}
+  .tag{display:inline-block;background:rgba(42,157,143,.14);color:#176d64;border:1px solid rgba(42,157,143,.22);padding:.36rem .65rem;border-radius:999px;font-weight:800;font-size:1rem;margin:.15rem .25rem .15rem 0}
+  .dark .tag,.section .tag{background:rgba(142,225,213,.16);color:#b9fff6;border-color:rgba(142,225,213,.2)}
+  .warning{background:rgba(231,111,81,.12);border-left:9px solid var(--danger);padding:1rem 1.2rem;border-radius:20px;margin:1rem 0;font-weight:750}
+  .tip{background:rgba(42,157,143,.12);border-left:9px solid var(--accent2);padding:1rem 1.2rem;border-radius:20px;margin:1rem 0;font-weight:750}
+  .question{font-size:clamp(1.55rem,2.6vw,3rem);line-height:1.18;font-weight:850;letter-spacing:-.03em;margin:.6rem 0}
+  details{
+    background:rgba(255,255,255,.92);
+    border:1px solid rgba(20,32,51,.10);
+    border-radius:22px;
+    padding:1rem 1.25rem;
+    margin:.9rem 0;
+    box-shadow:0 12px 30px rgba(20,32,51,.10);
+  }
+  .dark details,.section details{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.18);color:white}
+  summary{cursor:pointer;font-size:clamp(1.1rem,1.45vw,1.55rem);font-weight:850;color:#0e655d}
+  .dark summary,.section summary{color:#a8f0e7}
+  .badge{position:absolute;right:6vw;top:4.5vh;font-weight:900;color:rgba(20,32,51,.22);font-size:1.05rem}
+  .dark .badge,.section .badge{color:rgba(255,255,255,.28)}
+  .controls{position:fixed;right:22px;bottom:18px;display:flex;gap:8px;z-index:50;align-items:center;background:rgba(8,17,31,.72);backdrop-filter:blur(10px);padding:8px;border-radius:999px;color:white;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  button{border:0;background:#ffffff;color:#0b1424;font-weight:850;border-radius:999px;padding:9px 14px;cursor:pointer;font-size:.95rem}
+  button.secondary{background:rgba(255,255,255,.16);color:white;border:1px solid rgba(255,255,255,.22)}
+  #counter{font-weight:800;padding:0 8px;min-width:72px;text-align:center}
+  .progress{position:fixed;left:0;top:0;height:6px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;z-index:60;transition:width .2s ease}
+  .cols{display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;align-items:center}
+  .big-num{font-size:clamp(4rem,8vw,8rem);font-weight:950;line-height:.85;letter-spacing:-.08em;color:var(--accent2)}
+  .mini-board{background:#101d33;color:white;border-radius:30px;padding:1.5rem 1.8rem;box-shadow:0 22px 60px rgba(8,17,31,.25)}
+  .mini-board p,.mini-board li{color:white}
+  .flow{display:flex;gap:1rem;align-items:center;flex-wrap:wrap;margin:1.2rem 0}
+  .flow .pill{background:white;border:1px solid rgba(20,32,51,.08);border-radius:999px;padding:.8rem 1.1rem;font-weight:850;font-size:clamp(1.05rem,1.4vw,1.45rem);box-shadow:0 10px 25px rgba(20,32,51,.10)}
+  .arrow{font-size:2rem;color:var(--accent2);font-weight:900}
+  .callout{font-size:clamp(1.45rem,2vw,2.15rem);font-weight:850;line-height:1.25;background:rgba(244,162,97,.15);border:1px solid rgba(244,162,97,.28);padding:1.1rem 1.35rem;border-radius:28px}
+  .answerline{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .eq{font-size:clamp(1.15rem,1.55vw,1.8rem)}
+  .footer-note{position:absolute;left:6vw;bottom:3vh;color:rgba(20,32,51,.42);font-weight:750;font-size:.95rem}
+  .choices.compact p{margin:.2rem 0;font-size:clamp(.98rem,1.08vw,1.2rem);line-height:1.18}
+
+  .choices{margin-top:.8rem;display:grid;gap:.25rem}
+  .choices p{margin:.12rem 0;font-size:clamp(1.15rem,1.45vw,1.55rem);line-height:1.22}
+  .dark .footer-note,.section .footer-note{color:rgba(255,255,255,.42)}
+  @media (max-width:900px){.grid.two,.grid.three,.cols,.answerline{grid-template-columns:1fr}.slide{padding:6vh 5vw 10vh}.controls{left:50%;right:auto;transform:translateX(-50%)} }
+  @media print{
+    @page{size:13.333in 7.5in;margin:0}
+    html,body{background:white;overflow:visible}
+    .slide{width:13.333in;height:7.5in;min-height:7.5in;break-after:page;padding:.55in .65in .6in;overflow:hidden}
+    .controls,.progress{display:none!important}
+    details{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<section class="slide dark" id="s1">
+  <div class="badge">01</div>
+  <div class="kicker">Ekskul Astronomi • Pertemuan 2</div>
+  <h1>Gravitasi Newton<br/>dan Orbit Satelit</h1>
+  <div class="footer-note">Gunakan tombol ← →, tombol navigasi, atau scroll.</div>
+</section>
+
+<section class="slide" id="s2">
+  <div class="badge">02</div>
+  <div class="kicker">Tujuan Hari Ini</div>
+  <h2>Satu alur besar</h2>
+  <div class="flow">
+    <span class="pill">Gravitasi</span><span class="arrow">→</span>
+    <span class="pill">Gerak melingkar</span><span class="arrow">→</span>
+    <span class="pill">Orbit</span><span class="arrow">→</span>
+    <span class="pill">Soal astronomi</span>
+  </div>
+  <div class="grid two">
+    <div class="card"><h3>Siswa mampu</h3><ul><li>membaca pengaruh massa dan jarak;</li><li>menentukan jarak satelit dari pusat planet;</li><li>menjelaskan orbit sebagai akibat gravitasi.</li></ul></div>
+    <div class="card"><h3>Belum dibahas</h3><ul><li>orbit elips;</li><li>energi orbit;</li><li>kecepatan lepas;</li><li>titik Lagrange dan batas Roche.</li></ul></div>
+  </div>
+</section>
+
+<section class="slide" id="s3">
+  <div class="badge">03</div>
+  <div class="kicker">Pemantik</div>
+  <h2>Kalau gravitasi Bumi menarik satelit, kenapa satelit tidak langsung jatuh ke Bumi?</h2>
+  <div class="grid two">
+    <div class="card"><p class="question">Apa yang sebenarnya menjaga satelit tetap berada pada orbitnya?</p></div>
+    <div class="mini-board"><p>Hukum gravitasi Newton:</p><div class="formula">\[F=\frac{GMm}{r^2}\]</div></div>
+  </div>
+  <details><summary>Tampilkan pembahasan</summary>
+    <div class="callout">Satelit memiliki kecepatan tangensial. Jika tidak ada gravitasi, satelit akan bergerak lurus ke depan. Karena ada gaya gravitasi menuju pusat Bumi, arah geraknya terus dibelokkan sehingga lintasannya menjadi orbit.</div>
+    <div class="formula light">\[F_g=\frac{GMm}{r^2}=\frac{mv^2}{r}\]</div>
+  </details>
+</section>
+
+<section class="slide section" id="s4">
+  <div class="badge">04</div>
+  <div class="kicker">Bagian 1</div>
+  <h1>Hukum Gravitasi Newton</h1>
+  <p class="lead">Semua benda bermassa saling tarik-menarik.</p>
+</section>
+
+<section class="slide" id="s5">
+  <div class="badge">05</div>
+  <div class="kicker">Konsep</div>
+  <h2>Apa yang menentukan kuat gravitasi?</h2>
+  <div class="grid three">
+    <div class="card"><div class="big-num">M</div><p>Massa benda pertama makin besar → gaya makin besar.</p></div>
+    <div class="card"><div class="big-num">m</div><p>Massa benda kedua makin besar → gaya makin besar.</p></div>
+    <div class="card"><div class="big-num">r</div><p>Jarak makin besar → gaya makin kecil.</p></div>
+  </div>
+  <div class="warning">Dalam astronomi, jarak \(r\) diukur dari pusat benda ke pusat benda.</div>
+</section>
+
+<section class="slide" id="s6">
+  <div class="badge">06</div>
+  <div class="kicker">Rumus</div>
+  <h2>Hukum Gravitasi Newton</h2>
+  <div class="formula light">\[F=\frac{GMm}{r^2}\]</div>
+  <div class="grid two">
+    <div class="card"><h3>Makna simbol</h3><ul><li>\(F\): gaya gravitasi</li><li>\(G\): konstanta gravitasi</li><li>\(M,m\): massa benda</li><li>\(r\): jarak pusat ke pusat</li></ul></div>
+    <div class="card"><h3>Konstanta</h3><div class="formula">\[G=6{,}67\times10^{-11}\ \mathrm{N\,m^2/kg^2}\]</div><p class="small">Untuk soal perbandingan, nilai \(G\) biasanya tidak perlu dimasukkan.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s7">
+  <div class="badge">07</div>
+  <div class="kicker">Contoh Terbimbing 1</div>
+  <h2>Jika jarak menjadi \(2r\), gaya menjadi berapa?</h2>
+  <div class="card">
+    <p class="question">Sebuah satelit mengalami gaya gravitasi \(F\) pada jarak \(r\) dari pusat planet. Tentukan gaya gravitasi saat jaraknya menjadi \(2r\).</p>
+  </div>
+  <details><summary>Tampilkan pembahasan contoh</summary>
+    <div class="card eq">
+      <p>Gaya awal:</p>
+      <div class="formula">\[F=\frac{GMm}{r^2}\]</div>
+      <p>Gaya baru:</p>
+      <div class="formula">\[F'=\frac{GMm}{(2r)^2}=\frac{GMm}{4r^2}=\frac{1}{4}F\]</div>
+    </div>
+    <div class="tip">Kesimpulan: jarak 2 kali lebih besar → gaya gravitasi menjadi \(\frac{1}{4}\) kali.</div>
+  </details>
+</section>
+
+<section class="slide" id="s8">
+  <div class="badge">08</div>
+  <div class="kicker">Contoh Terbimbing 2</div>
+  <h2>Massa 4 kali, jarak 2 kali</h2>
+  <div class="card">
+    <p class="question">Massa planet menjadi 4 kali lebih besar, sedangkan jarak satelit dari pusat planet menjadi 2 kali. Bagaimana gaya gravitasinya?</p>
+  </div>
+  <details><summary>Tampilkan pembahasan contoh</summary>
+    <div class="formula light">\[\frac{F_{baru}}{F_{lama}}=\frac{4}{2^2}=\frac{4}{4}=1\]</div>
+    <div class="callout">Gaya gravitasi tetap sama.</div>
+  </details>
+</section>
+
+<section class="slide" id="s9">
+  <div class="badge">09</div>
+  <div class="kicker">Soal</div>
+  <h2>Perubahan gaya gravitasi</h2>
+  <div class="grid two">
+    <div class="card"><h3>Soal 1</h3><p>Massa planet menjadi 3 kali. Jarak tetap. Gaya menjadi?</p></div>
+    <div class="card"><h3>Soal 2</h3><p>Jarak satelit menjadi 3 kali. Gaya menjadi?</p></div>
+    <div class="card"><h3>Soal 3</h3><p>Massa planet 2 kali dan jarak 2 kali. Gaya menjadi?</p></div>
+    <div class="card"><h3>Soal 4</h3><p>Jarak menjadi setengah. Gaya menjadi?</p></div>
+  </div>
+  <details><summary>Tampilkan pembahasan</summary>
+    <ul><li>Soal 1: \(3\) kali.</li><li>Soal 2: \(\frac{1}{9}\) kali.</li><li>Soal 3: \(\frac{2}{2^2}=\frac12\) kali.</li><li>Soal 4: \(\frac{1}{(1/2)^2}=4\) kali.</li></ul>
+  </details>
+</section>
+
+<section class="slide section" id="s10">
+  <div class="badge">10</div>
+  <div class="kicker">Bagian 2</div>
+  <h1>Jarak Satelit<br/>dan Percepatan Gravitasi</h1>
+  <p class="lead">Ketinggian bukan selalu jarak dari pusat.</p>
+</section>
+
+<section class="slide" id="s11">
+  <div class="badge">11</div>
+  <div class="kicker">Konsep</div>
+  <h2>Bedakan \(R\), \(h\), dan \(r\)</h2>
+  <div class="grid three">
+    <div class="card"><h3>\(R\)</h3><p>Jari-jari planet.</p></div>
+    <div class="card"><h3>\(h\)</h3><p>Ketinggian satelit dari permukaan.</p></div>
+    <div class="card"><h3>\(r\)</h3><p>Jarak satelit dari pusat planet.</p></div>
+  </div>
+  <div class="formula light">\[r=R+h\]</div>
+  <div class="warning">Dalam rumus gravitasi, gunakan \(r\), bukan langsung \(h\).</div>
+</section>
+
+<section class="slide" id="s12">
+  <div class="badge">12</div>
+  <div class="kicker">Rumus</div>
+  <h2>Dari gaya ke percepatan gravitasi</h2>
+  <div class="answerline">
+    <div class="card eq">
+      <p>Mulai dari:</p>
+      <div class="formula">\[F=\frac{GMm}{r^2}\]</div>
+      <p>dan:</p>
+      <div class="formula">\[F=ma\]</div>
+    </div>
+    <div class="card eq">
+      <p>Maka:</p>
+      <div class="formula">\[ma=\frac{GMm}{r^2}\]</div>
+      <p>Massa \(m\) dicoret:</p>
+      <div class="formula">\[g=\frac{GM}{r^2}\]</div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s13">
+  <div class="badge">13</div>
+  <div class="kicker">Contoh Terbimbing</div>
+  <h2>Diameter, ketinggian, dan gravitasi</h2>
+  <div class="card">
+    <p>Sebuah planet berdiameter \(10.000\ \mathrm{km}\). Sebuah satelit berada \(2.500\ \mathrm{km}\) di atas permukaannya.</p>
+    <p class="question">a. Tentukan jarak satelit dari pusat planet.</p>
+    <p class="question">b. Bandingkan percepatan gravitasi di posisi satelit dengan percepatan gravitasi di permukaan planet.</p>
+  </div>
+  <details><summary>Tampilkan pembahasan contoh</summary>
+    <p>Jari-jari planet:</p>
+    <div class="formula light">\[R=\frac{D}{2}=\frac{10.000}{2}=5.000\ \mathrm{km}\]</div>
+    <p>Jarak satelit dari pusat planet:</p>
+    <div class="formula light">\[r=R+h=5.000+2.500=7.500\ \mathrm{km}\]</div>
+    <p>Perbandingan percepatan gravitasi:</p>
+    <div class="formula light">\[\frac{g_{satelit}}{g_{permukaan}}=\frac{GM/r^2}{GM/R^2}=\frac{R^2}{r^2}=\left(\frac{5.000}{7.500}\right)^2=\left(\frac{2}{3}\right)^2=\frac{4}{9}\]</div>
+    <div class="tip">Jadi, jarak satelit dari pusat planet adalah \(7.500\ \mathrm{km}\), dan percepatan gravitasinya \(\frac{4}{9}\) kali gravitasi permukaan.</div>
+  </details>
+</section>
+
+<section class="slide" id="s14">
+  <div class="badge">14</div>
+  <div class="kicker">Soal</div>
+  <h2>Jarak dari pusat planet</h2>
+  <div class="grid two">
+    <div class="card"><h3>Soal 1</h3><p>Planet berdiameter \(12.000\ \mathrm{km}\). Satelit berada \(3.000\ \mathrm{km}\) di atas permukaannya. Tentukan \(r\) dan bandingkan \(g_{satelit}\) dengan \(g_{permukaan}\).</p></div>
+    <div class="card"><h3>Soal 2</h3><p>Sebuah satelit berada pada ketinggian \(\frac{1}{2}R\) di atas permukaan planet berjari-jari \(R\). Tentukan jarak satelit dari pusat planet dan nilai \(g_{satelit}/g_{permukaan}\).</p></div>
+    <div class="card"><h3>Soal 3</h3><p>Pada planet yang sama, Satelit A berada pada ketinggian \(R\), sedangkan Satelit B berada pada ketinggian \(2R\). Bandingkan \(g_A\) dengan \(g_B\).</p></div>
+  </div>
+  <details><summary>Tampilkan pembahasan</summary>
+    <ul>
+      <li>Soal 1: \(R=6.000\ \mathrm{km}\), \(r=6.000+3.000=9.000\ \mathrm{km}\). Maka \(g_{satelit}/g_{permukaan}=(6.000/9.000)^2=(2/3)^2=4/9\).</li>
+      <li>Soal 2: \(r=R+\frac{1}{2}R=\frac{3}{2}R\). Maka \(g_{satelit}/g_{permukaan}=\left(\frac{R}{(3/2)R}\right)^2=\left(\frac{2}{3}\right)^2=4/9\).</li>
+      <li>Soal 3: \(r_A=2R\), sehingga \(g_A=GM/(2R)^2=GM/4R^2\). \(r_B=3R\), sehingga \(g_B=GM/(3R)^2=GM/9R^2\). Jadi \(g_A:g_B=\frac{1}{4}:\frac{1}{9}=9:4\).</li>
+    </ul>
+  </details>
+</section>
+
+<section class="slide section" id="s15">
+  <div class="badge">15</div>
+  <div class="kicker">Bagian 3</div>
+  <h1>Gravitasi sebagai Penyebab Orbit</h1>
+  <p class="lead">Gravitasi terus membelokkan arah gerak satelit sehingga satelit tetap mengorbit.</p>
+</section>
+
+<section class="slide" id="s16">
+  <div class="badge">16</div>
+  <div class="kicker">Konsep</div>
+  <h2>Mengapa gravitasi justru menjaga satelit tetap mengorbit?</h2>
+  <div class="cols">
+    <div>
+      <div class="card">
+        <h3>Ide utamanya</h3>
+        <ul>
+          <li>Satelit memiliki <b>kecepatan tangensial</b>, yaitu arah geraknya sesaat menyinggung orbit.</li>
+          <li>Jika tidak ada gravitasi, satelit akan terus bergerak <b>lurus</b>.</li>
+          <li>Gravitasi memberi <b>percepatan sentripetal</b> menuju pusat Bumi.</li>
+          <li>Akibatnya, yang terus berubah adalah <b>arah kecepatan</b> satelit.</li>
+          <li>Karena arah geraknya terus dibelokkan, lintasan satelit menjadi <b>orbit</b>.</li>
+        </ul>
+      </div>
+      <div class="callout">Tanpa gravitasi, satelit bergerak lurus. Gravitasi terus membelokkan geraknya sehingga satelit mengorbit.</div>
+    </div>
+    <div class="card">
+      <svg viewBox="0 0 560 340" style="width:100%;height:auto" aria-label="Ilustrasi konsep orbit satelit">
+        <defs>
+          <marker id="arrowTang" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#f4a261"></polygon>
+          </marker>
+          <marker id="arrowGrav" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#e76f51"></polygon>
+          </marker>
+        </defs>
+        <path d="M 350 105 Q 445 145 445 245" fill="none" stroke="#2a9d8f" stroke-width="5" stroke-dasharray="8 7"></path>
+        <circle cx="240" cy="220" r="90" fill="#335cde" opacity="0.9"></circle>
+        <circle cx="240" cy="220" r="90" fill="none" stroke="#173171" stroke-width="4"></circle>
+        <text x="240" y="228" text-anchor="middle" font-size="28" font-weight="800" fill="white">Bumi</text>
+        <circle cx="350" cy="105" r="8" fill="#f4a261"></circle>
+        <text x="365" y="98" font-size="20" font-weight="700" fill="#142033">Satelit</text>
+        <line x1="350" y1="105" x2="470" y2="105" stroke="#f4a261" stroke-width="6" marker-end="url(#arrowTang)"></line>
+        <text x="372" y="78" font-size="18" font-weight="700" fill="#9a5a15">kecepatan tangensial</text>
+        <line x1="350" y1="105" x2="279" y2="178" stroke="#e76f51" stroke-width="6" marker-end="url(#arrowGrav)"></line>
+        <text x="314" y="170" font-size="18" font-weight="700" fill="#b64025">gravitasi</text>
+        <text x="290" y="194" font-size="18" font-weight="700" fill="#b64025">(percepatan sentripetal)</text>
+        <line x1="240" y1="220" x2="350" y2="105" stroke="#8aa0c9" stroke-width="3" stroke-dasharray="6 6"></line>
+      </svg>
+      <p class="small">Panah oranye menunjukkan arah kecepatan sesaat. Panah merah menunjukkan arah gaya gravitasi menuju pusat Bumi.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s17">
+  <div class="badge">17</div>
+  <div class="kicker">Rumus</div>
+  <h2>Orbit lingkaran</h2>
+  <div class="grid two">
+    <div class="card"><h3>Gaya gravitasi</h3><div class="formula">\[F_g=\frac{GMm}{r^2}\]</div></div>
+    <div class="card"><h3>Gaya sentripetal</h3><div class="formula">\[F_s=\frac{mv^2}{r}\]</div></div>
+  </div>
+  <div class="formula light">\[\frac{GMm}{r^2}=\frac{mv^2}{r}\]</div>
+  <p class="small">Pada orbit lingkaran, gaya sentripetal yang dibutuhkan satelit disediakan oleh gaya gravitasi.</p>
+</section>
+
+<section class="slide" id="s18">
+  <div class="badge">18</div>
+  <div class="kicker">Penurunan Rumus</div>
+  <h2>Kecepatan orbit</h2>
+  <div class="formula light">\[\frac{GMm}{r^2}=\frac{mv^2}{r}\]</div>
+  <div class="formula light">\[\frac{GM}{r^2}=\frac{v^2}{r}\]</div>
+  <div class="formula light">\[v^2=\frac{GM}{r}\]</div>
+  <div class="formula">\[v=\sqrt{\frac{GM}{r}}\]</div>
+</section>
+
+<section class="slide" id="s19">
+  <div class="badge">19</div>
+  <div class="kicker">Contoh Terbimbing</div>
+  <h2>Jarak orbit menjadi \(4r\)</h2>
+  <div class="card">
+    <p class="question">Sebuah satelit dipindahkan ke orbit dengan jari-jari 4 kali semula pada planet yang sama. Bagaimana kecepatan orbitnya?</p>
+  </div>
+  <details><summary>Tampilkan pembahasan contoh</summary>
+    <div class="formula light">\[v=\sqrt{\frac{GM}{r}}\]</div>
+    <div class="formula light">\[\frac{v_{baru}}{v_{lama}}=\sqrt{\frac{r}{4r}}=\sqrt{\frac{1}{4}}=\frac12\]</div>
+    <div class="tip">Kecepatan orbit menjadi setengah.</div>
+  </details>
+</section>
+
+<section class="slide" id="s20">
+  <div class="badge">20</div>
+  <div class="kicker">Soal</div>
+  <h2>Kecepatan orbit</h2>
+  <div class="grid two">
+    <div class="card"><h3>Soal 1</h3><p>Satelit A pada jarak \(r\). Satelit B pada jarak \(9r\). Bandingkan \(v_B\) dengan \(v_A\).</p></div>
+    <div class="card"><h3>Soal 2</h3><p>Satelit 100 kg dan 500 kg mengorbit pada jarak yang sama. Bandingkan kecepatannya.</p></div>
+    <div class="card"><h3>Soal 3</h3><p>Massa planet menjadi 4 kali. Jarak orbit sama. Bandingkan kecepatannya.</p></div>
+    <div class="card"><h3>Soal 4</h3><p>Sebuah planet memiliki massa \(8{,}0\times10^{23}\ \mathrm{kg}\) dan jari-jari \(4.000\ \mathrm{km}\). Sebuah satelit mengorbit secara melingkar pada ketinggian \(2.000\ \mathrm{km}\) dari permukaan planet.</p><p>Kecepatan orbit satelit tersebut kira-kira …</p><div class="choices compact"><p>A. \(1{,}5\ \mathrm{km/s}\)</p><p>B. \(2{,}0\ \mathrm{km/s}\)</p><p>C. \(3{,}0\ \mathrm{km/s}\)</p><p>D. \(4{,}5\ \mathrm{km/s}\)</p><p>E. \(6{,}0\ \mathrm{km/s}\)</p></div></div>
+  </div>
+  <details><summary>Tampilkan pembahasan</summary>
+    <ul>
+      <li>Soal 1: \(v_B/v_A=\sqrt{r/9r}=1/3\).</li>
+      <li>Soal 2: sama, karena massa satelit tidak muncul dalam rumus.</li>
+      <li>Soal 3: \(v_{baru}/v_{lama}=\sqrt{4}=2\).</li>
+      <li>Soal 4: \(r=4000+2000=6000\ \mathrm{km}=6{,}0\times10^6\ \mathrm{m}\). \(v=\sqrt{GM/r}\approx\sqrt{(6{,}67\times10^{-11})(8{,}0\times10^{23})/(6{,}0\times10^6)}\approx3{,}0\times10^3\ \mathrm{m/s}=3{,}0\ \mathrm{km/s}\).</li>
+    </ul>
+  </details>
+</section>
+
+<section class="slide section" id="s21">
+  <div class="badge">21</div>
+  <div class="kicker">Bagian 4</div>
+  <h1>Soal Model OSN</h1>
+  <p class="lead">Mencari massa planet dari data orbit satelit.</p>
+</section>
+
+<section class="slide" id="s22">
+  <div class="badge">22</div>
+  <div class="kicker">Soal Planet Xi</div>
+  <h2>Baca informasi penting</h2>
+  <div class="card">
+    <p>Sebuah satelit bermassa 150 kg mengorbit planet Xi dengan kecepatan 3 km/s. Satelit berada pada ketinggian 750 km dari permukaan planet Xi yang berdiameter 6500 km.</p>
+    <p class="question">Massa planet Xi adalah?</p>
+    <div class="choices">
+      <p>A. \(1{,}0\times10^{23}\ \mathrm{kg}\)</p>
+      <p>B. \(4{,}4\times10^{23}\ \mathrm{kg}\)</p>
+      <p>C. \(5{,}4\times10^{23}\ \mathrm{kg}\)</p>
+      <p>D. \(6{,}8\times10^{23}\ \mathrm{kg}\)</p>
+      <p>E. Tidak dapat ditentukan</p>
+    </div>
+  </div>
+  <div class="warning">Untuk soal hari ini, kita anggap orbit satelit berbentuk lingkaran.</div>
+</section>
+
+<section class="slide" id="s23">
+  <div class="badge">23</div>
+  <div class="kicker">Strategi</div>
+  <h2>Pecah soal menjadi langkah kecil</h2>
+  <div class="grid two">
+    <div class="card"><h3>1</h3><p>Tentukan jari-jari planet.</p></div>
+    <div class="card"><h3>2</h3><p>Tentukan jarak satelit dari pusat planet.</p></div>
+    <div class="card"><h3>3</h3><p>Ubah semua satuan ke SI.</p></div>
+    <div class="card"><h3>4</h3><p>Gunakan \(M=\frac{v^2r}{G}\).</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s24">
+  <div class="badge">24</div>
+  <div class="kicker">Soal</div>
+  <h2>Planet Xi</h2>
+  <div class="card">
+    <ul>
+      <li>\(R=\frac{D}{2}=\ldots\)</li>
+      <li>\(r=R+h=\ldots\)</li>
+      <li>\(v=\ldots\ \mathrm{m/s}\)</li>
+      <li>\(r=\ldots\ \mathrm{m}\)</li>
+      <li>\(M=\frac{v^2r}{G}=\ldots\)</li>
+    </ul>
+  </div>
+  <details><summary>Tampilkan pembahasan</summary>
+    <p>Jari-jari planet: \(R=6500/2=3250\ \mathrm{km}\).</p>
+    <p>Jarak satelit dari pusat: \(r=3250+750=4000\ \mathrm{km}=4{,}0\times10^6\ \mathrm{m}\).</p>
+    <p>Kecepatan: \(v=3\ \mathrm{km/s}=3{,}0\times10^3\ \mathrm{m/s}\).</p>
+    <p>Gunakan \(M=v^2r/G\).</p>
+  </details>
+</section>
+
+<section class="slide" id="s25">
+  <div class="badge">25</div>
+  <div class="kicker">Pembahasan Planet Xi</div>
+  <h2>Hitungan akhir</h2>
+  <div class="formula light">\[M=\frac{v^2r}{G}\]</div>
+  <div class="formula light">\[M=\frac{(3{,}0\times10^3)^2(4{,}0\times10^6)}{6{,}67\times10^{-11}}\]</div>
+  <div class="formula light">\[M=\frac{9{,}0\times10^6\times4{,}0\times10^6}{6{,}67\times10^{-11}}\]</div>
+  <div class="formula">\[M\approx5{,}4\times10^{23}\ \mathrm{kg}\]</div>
+  <div class="callout">Jawaban: C</div>
+</section>
+
+<section class="slide" id="s26">
+  <div class="badge">26</div>
+  <div class="kicker">Diskusi Jebakan</div>
+  <h2>Apa yang sering membuat salah?</h2>
+  <div class="grid two">
+    <div class="card"><h3>Jebakan 1</h3><p>Memakai \(750\ \mathrm{km}\) sebagai \(r\).</p><p class="small">Padahal \(r\) harus dari pusat planet.</p></div>
+    <div class="card"><h3>Jebakan 2</h3><p>Lupa mengubah km ke meter.</p></div>
+    <div class="card"><h3>Jebakan 3</h3><p>Mengira massa satelit harus dipakai.</p></div>
+    <div class="card"><h3>Jebakan 4</h3><p>Lupa asumsi orbit lingkaran.</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s27">
+  <div class="badge">27</div>
+  <div class="kicker">Soal Penutup</div>
+  <h2>Exit ticket</h2>
+  <div class="grid two">
+    <div class="card"><h3>1</h3><p>Satelit berada 500 km di atas planet berjari-jari 3000 km. Berapa \(r\)?</p></div>
+    <div class="card"><h3>2</h3><p>Jika jarak dari pusat planet menjadi 2 kali, bagaimana \(g\)?</p></div>
+    <div class="card"><h3>3</h3><p>Mengapa satelit dapat terus mengorbit?</p></div>
+  </div>
+  <details><summary>Tampilkan pembahasan</summary>
+    <ul><li>\(r=3000+500=3500\ \mathrm{km}\).</li><li>\(g\) menjadi \(\frac{1}{4}\) kali.</li><li>Karena gravitasi memberikan percepatan menuju pusat, sehingga lintasan satelit terus dibelokkan.</li></ul>
+  </details>
+</section>
+
+<section class="slide" id="s28">
+  <div class="badge">28</div>
+  <div class="kicker">Rangkuman</div>
+  <h2>Empat ide yang harus dibawa pulang</h2>
+  <div class="grid two">
+    <div class="card"><h3>1</h3><p>Gravitasi dipengaruhi massa dan jarak.</p></div>
+    <div class="card"><h3>2</h3><p>Jarak dalam gravitasi dihitung dari pusat benda.</p></div>
+    <div class="card"><h3>3</h3><p>Gravitasi terus membelokkan arah gerak satelit sehingga satelit tetap mengorbit.</p></div>
+    <div class="card"><h3>4</h3><p>Pada orbit lingkaran: \(v=\sqrt{GM/r}\).</p></div>
+  </div>
+</section>
+
+<section class="slide dark" id="s29">
+  <div class="badge">29</div>
+  <div class="kicker">Pertemuan Berikutnya</div>
+  <h1>Menuju Hukum Kepler</h1>
+  <p class="lead">Dari kecepatan orbit menuju periode orbit: \(T^2\) sebanding dengan \(r^3\).</p>
+  <div class="formula">\[v=\frac{2\pi r}{T}\quad\text{dan}\quad v=\sqrt{\frac{GM}{r}}\]</div>
+</section>
+
+<div class="controls">
+  <button class="secondary" onclick="prevSlide()">←</button>
+  <span id="counter">1 / 29</span>
+  <button onclick="nextSlide()">→</button>
+  <button class="secondary" onclick="toggleAnswers()">Buka/tutup jawaban</button>
+</div>
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+let current = 0;
+let answersOpen = false;
+
+function update(){
+  const mid = window.scrollY + window.innerHeight/2;
+  current = slides.reduce((best, slide, i) => {
+    const top = slide.offsetTop;
+    const dist = Math.abs(mid - (top + slide.offsetHeight/2));
+    return dist < best.dist ? {i, dist} : best;
+  }, {i:0, dist:Infinity}).i;
+  counter.textContent = `${current+1} / ${slides.length}`;
+  progress.style.width = `${((current+1)/slides.length)*100}%`;
+}
+function go(i){
+  i = Math.max(0, Math.min(slides.length-1, i));
+  slides[i].scrollIntoView({behavior:'smooth', block:'start'});
+}
+function nextSlide(){go(current+1)}
+function prevSlide(){go(current-1)}
+function toggleAnswers(){
+  answersOpen = !answersOpen;
+  document.querySelectorAll('details').forEach(d => d.open = answersOpen);
+  if(window.MathJax && MathJax.typesetPromise){MathJax.typesetPromise();}
+}
+window.addEventListener('scroll', update, {passive:true});
+window.addEventListener('resize', update);
+window.addEventListener('keydown', (e)=>{
+  if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault(); nextSlide();}
+  if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault(); prevSlide();}
+  if(e.key.toLowerCase()==='j'){toggleAnswers();}
+});
+window.addEventListener('load', ()=>{update(); if(window.MathJax && MathJax.typesetPromise){MathJax.typesetPromise();}});
+</script>
+</body>
+</html>
