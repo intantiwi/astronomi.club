@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Ruang Cemerlang — arsip pembelajaran Astronomi Club." />
+  <meta name="theme-color" content="#08152f" />
+  <title>Ruang Cemerlang | Astronomi Club</title>
+  <style>
+    :root {
+      --navy: #071329;
+      --navy-2: #0d2144;
+      --ink: #10203b;
+      --muted: #65738a;
+      --paper: #f7f9fd;
+      --white: #ffffff;
+      --line: #dfe6f2;
+      --blue: #3267e3;
+      --blue-soft: #e9efff;
+      --gold: #ffc857;
+      --mint: #4ad6b3;
+      --violet: #8f7cf5;
+      --shadow: 0 20px 60px rgba(13, 33, 68, .12);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(50,103,227,.08), transparent 32rem),
+        var(--paper);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+    button, input, a { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; }
+
+    .container { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid rgba(223,230,242,.7);
+      background: rgba(247,249,253,.82);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; }
+    .brand-mark {
+      width: 42px; height: 42px; border-radius: 14px;
+      display: grid; place-items: center;
+      color: var(--navy);
+      background: var(--gold);
+      box-shadow: 0 10px 25px rgba(255,200,87,.34);
+    }
+    .brand-mark svg { width: 24px; height: 24px; }
+    .brand-copy { display: grid; line-height: 1.2; }
+    .brand-copy small { color: var(--muted); font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 26px; color: #43516a; font-size: .94rem; font-weight: 650; }
+    .nav-links a:hover { color: var(--blue); }
+    .profile {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 12px 7px 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      font-size: .9rem;
+      font-weight: 750;
+    }
+    .avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: grid; place-items: center;
+      color: white; background: linear-gradient(135deg, var(--blue), var(--violet));
+    }
+
+    .hero { padding: 72px 0 38px; }
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      min-height: 470px;
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      align-items: center;
+      gap: 38px;
+      padding: clamp(34px, 5vw, 68px);
+      color: white;
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 85% 22%, rgba(255,200,87,.24), transparent 17rem),
+        linear-gradient(135deg, #061124, #0d2954 72%, #183b74);
+      box-shadow: var(--shadow);
+    }
+    .hero-panel::before, .hero-panel::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.76);
+      box-shadow: 90px -20px 0 -1px rgba(255,255,255,.45), 165px 74px 0 -2px rgba(255,255,255,.7), 260px 14px 0 -2px rgba(255,255,255,.42), 380px 78px 0 -1px rgba(255,255,255,.6);
+      width: 4px; height: 4px;
+      opacity: .75;
+    }
+    .hero-panel::before { right: 42%; top: 55px; }
+    .hero-panel::after { left: 8%; bottom: 80px; transform: scale(.7); }
+    .hero-copy, .orbit-art { position: relative; z-index: 2; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin: 0 0 18px;
+      padding: 7px 12px;
+      color: #dfe9ff;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 5px rgba(255,200,87,.13); }
+    h1 { margin: 0; max-width: 720px; font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -.055em; }
+    .hero-copy > p { max-width: 650px; margin: 24px 0 30px; color: #c8d6f1; font-size: clamp(1rem, 1.7vw, 1.14rem); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      min-height: 48px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      font-weight: 800;
+      transition: .2s ease;
+    }
+    .btn-primary { color: var(--navy); background: var(--gold); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(255,200,87,.23); }
+    .btn-secondary { color: white; border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.08); }
+    .btn-secondary:hover { background: rgba(255,255,255,.14); }
+
+    .orbit-art { height: 330px; display: grid; place-items: center; }
+    .orbit {
+      position: absolute;
+      width: min(320px, 75vw); aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 50%;
+      transform: rotate(-18deg) scaleY(.48);
+    }
+    .orbit.o2 { width: 240px; opacity: .7; transform: rotate(28deg) scaleY(.58); }
+    .planet {
+      position: relative;
+      width: 138px; aspect-ratio: 1; border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 26%, rgba(255,255,255,.85), transparent 10%),
+        radial-gradient(circle at 72% 68%, #3156be, #7e8df5 35%, #b0b7ff 60%, #6271dc);
+      box-shadow: inset -18px -16px 28px rgba(8,21,47,.35), 0 0 55px rgba(143,124,245,.42);
+    }
+    .planet::after {
+      content: "";
+      position: absolute; inset: 43% -28%;
+      border: 11px solid rgba(255,200,87,.82);
+      border-left-color: transparent;
+      border-radius: 50%;
+      transform: rotate(-12deg) scaleY(.28);
+    }
+    .satellite {
+      position: absolute; right: 9%; top: 24%;
+      width: 40px; height: 22px;
+      border: 4px solid #dce7ff;
+      border-left-width: 12px; border-right-width: 12px;
+      background: var(--gold);
+      transform: rotate(18deg);
+      box-shadow: 0 0 22px rgba(255,200,87,.55);
+    }
+
+    .section { padding: 42px 0; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 24px; }
+    .section-heading h2 { margin: 0; font-size: clamp(1.65rem, 3vw, 2.3rem); letter-spacing: -.035em; }
+    .section-heading p { margin: 5px 0 0; color: var(--muted); }
+
+    .search-wrap {
+      position: relative;
+      width: min(380px, 100%);
+    }
+    .search-wrap svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 19px; color: var(--muted); }
+    .search-input {
+      width: 100%; height: 50px;
+      padding: 0 18px 0 46px;
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      outline: none;
+      background: white;
+      box-shadow: 0 8px 25px rgba(13,33,68,.05);
+    }
+    .search-input:focus { border-color: rgba(50,103,227,.55); box-shadow: 0 0 0 4px rgba(50,103,227,.1); }
+
+    .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .quick-card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      transition: .2s ease;
+    }
+    .quick-card:hover { transform: translateY(-3px); border-color: #c8d5ed; box-shadow: 0 16px 34px rgba(13,33,68,.09); }
+    .quick-icon { width: 43px; height: 43px; display: grid; place-items: center; margin-bottom: 20px; border-radius: 13px; }
+    .quick-icon svg { width: 22px; height: 22px; }
+    .quick-card:nth-child(1) .quick-icon { color: #2b59c3; background: #e8efff; }
+    .quick-card:nth-child(2) .quick-icon { color: #8b5f00; background: #fff2d3; }
+    .quick-card:nth-child(3) .quick-icon { color: #127b63; background: #dff8f1; }
+    .quick-card:nth-child(4) .quick-icon { color: #6958ca; background: #ece9ff; }
+    .quick-card strong { display: block; margin-bottom: 3px; font-size: 1.05rem; }
+    .quick-card span { color: var(--muted); font-size: .9rem; }
+
+    .filter-row { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 22px; }
+    .filter-btn {
+      padding: 9px 14px;
+      color: #536078;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: white;
+      font-size: .88rem;
+      font-weight: 750;
+    }
+    .filter-btn.active, .filter-btn:hover { color: white; border-color: var(--blue); background: var(--blue); }
+
+    .resource-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .resource-card {
+      min-height: 300px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: white;
+      box-shadow: 0 10px 30px rgba(13,33,68,.055);
+      transition: .2s ease;
+    }
+    .resource-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(13,33,68,.11); }
+    .clickable-card { cursor: pointer; }
+    .clickable-card:focus-visible { outline: 3px solid var(--blue); outline-offset: 4px; }
+    .resource-cover {
+      min-height: 126px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 20px;
+      color: white;
+      background:
+        radial-gradient(circle at 78% 30%, rgba(255,255,255,.23), transparent 7rem),
+        linear-gradient(135deg, #163a72, #3267e3);
+    }
+    .resource-card[data-category="latihan"] .resource-cover { background: linear-gradient(135deg, #7b4c00, #f0ab2c); }
+    .resource-card[data-category="simulasi"] .resource-cover { background: linear-gradient(135deg, #116c5a, #3cc9a8); }
+    .resource-card.placeholder .resource-cover { background: linear-gradient(135deg, #5a528d, #8f7cf5); }
+    .cover-orbit { width: 62px; height: 62px; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; display: grid; place-items: center; }
+    .cover-orbit::after { content: ""; width: 15px; height: 15px; border-radius: 50%; background: var(--gold); box-shadow: 22px -12px 0 -5px white; }
+    .type-badge { padding: 6px 9px; border-radius: 999px; background: rgba(255,255,255,.16); font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+    .resource-body { display: flex; flex-direction: column; flex: 1; padding: 20px; }
+    .resource-body h3 { margin: 0 0 8px; font-size: 1.18rem; }
+    .resource-body p { margin: 0 0 18px; color: var(--muted); font-size: .92rem; }
+    .resource-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; margin-bottom: 18px; }
+    .tag { padding: 5px 8px; border-radius: 8px; background: #f0f3f9; color: #5c6880; font-size: .76rem; font-weight: 700; }
+    .resource-actions { display: flex; gap: 9px; }
+    .resource-link { flex: 1; min-height: 42px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-radius: 11px; color: white; background: var(--blue); font-weight: 800; font-size: .88rem; }
+    .resource-link:hover { background: #2858c7; }
+    .resource-link.is-placeholder { color: #6e7890; background: #edf0f6; pointer-events: none; }
+    .icon-link { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 11px; background: white; }
+    .icon-link:hover { border-color: #b8c6df; }
+    .empty-state { display: none; padding: 44px; text-align: center; color: var(--muted); border: 1px dashed #cbd5e6; border-radius: var(--radius-lg); background: rgba(255,255,255,.66); }
+
+    .growth-panel {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 30px;
+      padding: clamp(28px, 5vw, 52px);
+      border-radius: var(--radius-xl);
+      border: 1px solid #d9e2f2;
+      background: linear-gradient(135deg, #fff, #eef3ff);
+    }
+    .growth-panel h2 { margin: 0 0 12px; font-size: clamp(1.8rem, 3.5vw, 2.8rem); line-height: 1.12; letter-spacing: -.04em; }
+    .growth-panel p { color: var(--muted); }
+    .timeline { display: grid; gap: 11px; }
+    .timeline-item { display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: start; padding: 16px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,255,255,.8); }
+    .timeline-num { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 10px; color: white; background: var(--blue); font-weight: 850; }
+    .timeline-item strong { display: block; margin-bottom: 2px; }
+    .timeline-item span { color: var(--muted); font-size: .9rem; }
+
+    footer { padding: 34px 0 46px; color: var(--muted); }
+    .footer-inner { display: flex; justify-content: space-between; gap: 20px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .footer-note strong { color: var(--ink); }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hero-panel { grid-template-columns: 1fr; }
+      .orbit-art { display: none; }
+      .quick-grid { grid-template-columns: repeat(2, 1fr); }
+      .resource-grid { grid-template-columns: repeat(2, 1fr); }
+      .growth-panel { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .container { width: min(calc(100% - 24px), var(--max)); }
+      .profile span { display: none; }
+      .hero { padding-top: 28px; }
+      .hero-panel { min-height: auto; padding: 30px 24px; border-radius: 22px; }
+      h1 { font-size: clamp(2.5rem, 15vw, 4rem); }
+      .section-heading { align-items: stretch; flex-direction: column; }
+      .search-wrap { width: 100%; }
+      .quick-grid, .resource-grid { grid-template-columns: 1fr; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="#beranda" aria-label="Ruang Cemerlang, kembali ke beranda">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><circle cx="12" cy="12" r="3.2"/><path d="M4.3 14.8c-2.1-1.3-2.8-2.7-2-3.8 1.5-2.2 7.5-.7 12.8 2.1 5.3 2.8 8.4 6.2 6.9 8.4-1.1 1.7-5.3.5-9.7-1.6"/><path d="M16.7 7.1c1.8-1.7 3.2-2.1 4.1-1.2 1.9 1.9-.6 7.5-4.3 12.1"/><path d="M8 5.9C6.1 4.3 4.7 4 3.9 5 2.5 6.8 4.5 11 8 14.9"/></svg>
+        </span>
+        <span class="brand-copy">Ruang Cemerlang<small>Astronomi Club</small></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Navigasi utama">
+        <a href="#koleksi">Koleksi</a>
+        <a href="#akses-cepat">Akses cepat</a>
+              </nav>
+
+      <div class="profile" title="Profil">
+        <span class="avatar" aria-hidden="true">RC</span>
+        <span>Ruang Cemerlang</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="beranda">
+    <section class="hero">
+      <div class="container">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> Astronomi Club</p>
+            <h1>Belajar astronomi, memahami semesta.</h1>
+            <p>Arsip pembelajaran Astronomi.</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#koleksi">Lihat materi terbaru <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+          <div class="orbit-art" aria-hidden="true">
+            <span class="orbit"></span><span class="orbit o2"></span>
+            <span class="planet"></span><span class="satellite"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="akses-cepat">
+      <div class="container">
+        <div class="section-heading">
+          <div><h2>Akses cepat</h2><p>Pilih jalur yang paling sering dibutuhkan.</p></div>
+        </div>
+        <div class="quick-grid">
+          <a class="quick-card" href="#koleksi" data-jump-filter="materi">
+            <span class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M8 7h8M8 11h8"/></svg></span>
+            <strong>Materi</strong><span>Slide, ringkasan, dan modul.</span>
+          </a>
+          <a class="quick-card" href="#koleksi" data-jump-filter="latihan">
+            <span class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3h10v4H7z"/><path d="M5 5h14v16H5z"/><path d="m8 13 2 2 5-5"/></svg></span>
+            <strong>Latihan</strong><span>Soal terbimbing dan tantangan.</span>
+          </a>
+          <a class="quick-card" href="#koleksi" data-jump-filter="simulasi">
+            <span class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="2.5"/><ellipse cx="12" cy="12" rx="9" ry="4"/><ellipse cx="12" cy="12" rx="4" ry="9" transform="rotate(35 12 12)"/></svg></span>
+            <strong>Simulasi</strong><span>Tautan eksplorasi interaktif.</span>
+          </a>
+          <a class="quick-card" href="#koleksi" data-jump-filter="arsip">
+            <span class="quick-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18v4H3zM5 10h14v11H5z"/><path d="M9 14h6"/></svg></span>
+            <strong>Arsip</strong><span>Dokumentasi dan file lama.</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="koleksi">
+      <div class="container">
+        <div class="section-heading">
+          <div><h2>Koleksi pembelajaran</h2><p>Materi, latihan, dan arsip pembelajaran Astronomi.</p></div>
+          <label class="search-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="searchInput" class="search-input" type="search" placeholder="Cari materi, topik, atau jenis file…" aria-label="Cari koleksi" />
+          </label>
+        </div>
+
+        <div class="filter-row" aria-label="Filter koleksi">
+          <button class="filter-btn active" type="button" data-filter="semua">Semua</button>
+          <button class="filter-btn" type="button" data-filter="materi">Materi</button>
+          <button class="filter-btn" type="button" data-filter="latihan">Latihan</button>
+          <button class="filter-btn" type="button" data-filter="simulasi">Simulasi</button>
+          <button class="filter-btn" type="button" data-filter="arsip">Arsip</button>
+        </div>
+
+        <div class="resource-grid" id="resourceGrid">
+          <article class="resource-card clickable-card" data-category="materi" data-search="gravitasi hukum newton orbit satelit planet slide presentasi" data-href="./materi/gravitasi-newton-dan-orbit-satelit.html" role="link" tabindex="0" aria-label="Buka materi Gravitasi dan Gerak Orbit">
+            <div class="resource-cover"><span class="type-badge">Materi utama</span><span class="cover-orbit"></span></div>
+            <div class="resource-body">
+              <h3>Gravitasi & Gerak Orbit</h3>
+              <p>Materi awal ekskul tentang gravitasi, jarak dari pusat planet, dan kecepatan orbit satelit.</p>
+              <div class="resource-meta"><span class="tag">Gravitasi</span><span class="tag">Orbit</span><span class="tag">Slide</span></div>
+              <div class="resource-actions">
+                <a class="resource-link" href="./materi/gravitasi-newton-dan-orbit-satelit.html">Buka materi <span aria-hidden="true">↗</span></a>
+                <button class="icon-link copy-link" type="button" data-link="./materi/gravitasi-newton-dan-orbit-satelit.html" title="Salin tautan" aria-label="Salin tautan materi">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="resource-card" data-category="latihan" data-search="latihan gravitasi kecepatan orbit osn soal satelit planet">
+            <div class="resource-cover"><span class="type-badge">Latihan</span><span class="cover-orbit"></span></div>
+            <div class="resource-body">
+              <h3>Latihan Kecepatan Orbit</h3>
+              <p>Kumpulan soal terbimbing dan model OSN untuk memperkuat konsep orbit satelit.</p>
+              <div class="resource-meta"><span class="tag">Soal</span><span class="tag">OSN</span><span class="tag">Orbit</span></div>
+              <div class="resource-actions">
+                <a class="resource-link" href="./materi/gravitasi-newton-dan-orbit-satelit.html#s20">Buka latihan <span aria-hidden="true">↗</span></a>
+                <button class="icon-link copy-link" type="button" data-link="./materi/gravitasi-newton-dan-orbit-satelit.html#s20" title="Salin tautan" aria-label="Salin tautan latihan">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <article class="resource-card placeholder" data-category="simulasi" data-search="simulasi gravitasi orbit interaktif segera hadir">
+            <div class="resource-cover"><span class="type-badge">Segera hadir</span><span class="cover-orbit"></span></div>
+            <div class="resource-body">
+              <h3>Simulasi Gravitasi</h3>
+              <p>Ruang untuk menautkan simulasi interaktif yang digunakan saat kegiatan ekskul.</p>
+              <div class="resource-meta"><span class="tag">Simulasi</span><span class="tag">Interaktif</span></div>
+              <div class="resource-actions"><span class="resource-link is-placeholder">Belum tersedia</span></div>
+            </div>
+          </article>
+
+          <article class="resource-card placeholder" data-category="arsip" data-search="arsip dokumentasi pertemuan foto catatan kegiatan">
+            <div class="resource-cover"><span class="type-badge">Arsip</span><span class="cover-orbit"></span></div>
+            <div class="resource-body">
+              <h3>Arsip Pertemuan</h3>
+              <p>Dokumentasi, catatan, foto, serta file pendukung dari setiap pertemuan ekskul.</p>
+              <div class="resource-meta"><span class="tag">Dokumentasi</span><span class="tag">Catatan</span></div>
+              <div class="resource-actions"><span class="resource-link is-placeholder">Belum tersedia</span></div>
+            </div>
+          </article>
+        </div>
+        <div class="empty-state" id="emptyState">Belum ada koleksi yang cocok dengan pencarian tersebut.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-note"><strong>Ruang Cemerlang</strong><br />Astronomi Club · Belajar, mengamati, dan bertanya.</div>
+      <div>© <span id="year"></span> Ruang Cemerlang</div>
+    </div>
+  </footer>
+
+  <script>
+    const searchInput = document.querySelector('#searchInput');
+    const cards = [...document.querySelectorAll('.resource-card')];
+    const filterButtons = [...document.querySelectorAll('.filter-btn')];
+    const emptyState = document.querySelector('#emptyState');
+    let activeFilter = 'semua';
+
+    function updateCards() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      cards.forEach(card => {
+        const matchesFilter = activeFilter === 'semua' || card.dataset.category === activeFilter;
+        const matchesSearch = !query || card.dataset.search.includes(query) || card.innerText.toLowerCase().includes(query);
+        const show = matchesFilter && matchesSearch;
+        card.style.display = show ? '' : 'none';
+        if (show) visible += 1;
+      });
+      emptyState.style.display = visible ? 'none' : 'block';
+    }
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        activeFilter = button.dataset.filter;
+        filterButtons.forEach(item => item.classList.toggle('active', item === button));
+        updateCards();
+      });
+    });
+
+    document.querySelectorAll('[data-jump-filter]').forEach(link => {
+      link.addEventListener('click', () => {
+        activeFilter = link.dataset.jumpFilter;
+        filterButtons.forEach(item => item.classList.toggle('active', item.dataset.filter === activeFilter));
+        updateCards();
+      });
+    });
+
+    searchInput.addEventListener('input', updateCards);
+
+    document.querySelectorAll('.clickable-card').forEach(card => {
+      const openCard = () => {
+        const href = card.dataset.href;
+        if (href) window.location.href = href;
+      };
+
+      card.addEventListener('click', event => {
+        if (event.target.closest('a, button')) return;
+        openCard();
+      });
+
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCard();
+        }
+      });
+    });
+
+    document.querySelectorAll('.copy-link').forEach(button => {
+      button.addEventListener('click', async () => {
+        const link = button.dataset.link;
+        if (!link) {
+          button.title = 'Tambahkan tautan terlebih dahulu';
+          return;
+        }
+        try {
+          await navigator.clipboard.writeText(new URL(link, window.location.href).href);
+          const oldTitle = button.title;
+          button.title = 'Tautan disalin';
+          setTimeout(() => button.title = oldTitle, 1500);
+        } catch (error) {
+          console.error('Gagal menyalin tautan:', error);
+        }
+      });
+    });
+
+    document.querySelector('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
